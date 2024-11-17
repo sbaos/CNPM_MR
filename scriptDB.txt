@@ -22,7 +22,7 @@ create table Author (
 create table user (
 	id int primary key AUTO_INCREMENT,
     Username varchar(255) not null,
-    Hashpassword varchar(255)
+    Hashpassword varchar(255),
 	UNIQUE (Username )
 );
 
