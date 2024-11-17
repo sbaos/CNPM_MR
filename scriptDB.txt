@@ -5,11 +5,13 @@ create table SCIENCE_ARTICLE (
     GithubCode varchar(255),
     link varchar(255),
     LastModified timestamp,
-    Price decimal(10,2)
+    Price decimal(10,2),
+    UNIQUE (GithubCode),
+    UNIQUE (Title) 
 );
 
 create table Author (
-	orcid int primary key AUTO_INCREMENT,
+	orcid int primary key,
     BirthDate timestamp,
     PenName Varchar(255),
     Lname varchar(255),
@@ -21,6 +23,7 @@ create table user (
 	id int primary key AUTO_INCREMENT,
     Username varchar(255) not null,
     Hashpassword varchar(255)
+	UNIQUE (Username )
 );
 
 create table cart (
@@ -28,7 +31,7 @@ id int primary key AUTO_INCREMENT
 );
 
 CREATE TABLE Academic_Event (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY ,
     name VARCHAR(255) NOT NULL,
     year INT NOT NULL CHECK (year >= 0)
 );
@@ -61,7 +64,7 @@ FOREIGN KEY (AdminID) REFERENCES admin(id)
 );
 
 CREATE TABLE Conference (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY,
     area VARCHAR(255) NOT NULL,
     sponsors VARCHAR(255),
     `rank` INT CHECK (`rank` >= 0),
@@ -84,7 +87,7 @@ create table reader(
 );
 
 create table paper (
-	id int primary key AUTO_INCREMENT,
+	id int primary key,
 	EventID int,
     	FOREIGN KEY (id) REFERENCES science_article(id),
 	FOREIGN KEY (EventID) REFERENCES academic_event(id)
