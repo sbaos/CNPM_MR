@@ -47,7 +47,8 @@ BEGIN
 END;
 
 DELIMITER ;
-    
+
+-- UPDATE PROCEDURE
     
 DELIMITER //
 
@@ -161,7 +162,7 @@ END //
 DELIMITER ;
 
 
-
+-- DELETE PROCEDURE
 DELIMITER //
 
 CREATE PROCEDURE delete_article(
