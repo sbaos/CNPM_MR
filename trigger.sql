@@ -188,4 +188,26 @@ END //
 DELIMITER ;
 
 
+-- trigger 1
+DELIMITER //
+CREATE TRIGGER check_viptier_on_update
+BEFORE UPDATE ON READER_HAS_DISCOUNT_COUPON
+FOR EACH ROW
+BEGIN
+    DECLARE reader_viptier INT;
+    DECLARE coupon_viptier_required INT;
 
+    SELECT VipTier INTO reader_viptier 
+    FROM reader 
+    WHERE id = NEW.ReaderID;
+
+    SELECT VipTierRequired INTO coupon_viptier_required 
+    FROM discount_coupon 
+    WHERE id = NEW.CouponID;
+
+    IF reader_viptier < coupon_viptier_required THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Reader\'s VipTier does not meet the required VipTier for the discount coupon.';
+    END IF;
+END //
+DELIMITER ;
