@@ -1,4 +1,4 @@
-create table SCIENCE_ARTICLE (
+CREATE TABLE SCIENCE_ARTICLE (
 	id int primary key AUTO_INCREMENT,
     Title varchar(255) not null,
     PublishDate timestamp,
@@ -10,7 +10,7 @@ create table SCIENCE_ARTICLE (
     UNIQUE (Title) 
 );
 
-create table Author (
+CREATE TABLE Author (
 	orcid int primary key,
     BirthDate timestamp,
     PenName Varchar(255),
@@ -19,14 +19,14 @@ create table Author (
     DomainConflict varchar(255)
 );
 
-create table user (
+CREATE TABLE user (
 	id int primary key AUTO_INCREMENT,
     Username varchar(255) not null,
     Hashpassword varchar(255),
 	UNIQUE (Username )
 );
 
-create table cart (
+CREATE TABLE cart (
 id int primary key AUTO_INCREMENT
 );
 
@@ -36,12 +36,12 @@ CREATE TABLE Academic_Event (
     year INT NOT NULL CHECK (year >= 0)
 );
 
-create table Category (
+CREATE TABLE Category (
 CategoryName varchar(255) primary key,
 Description varchar(255)
 );
 
-create table dataset(
+CREATE TABLE dataset(
 	name varchar(255) primary key,
     Description varchar(255),
     size varchar(255)
@@ -51,16 +51,16 @@ CREATE TABLE admin (
     FOREIGN KEY (id) REFERENCES user(id)
 );
 
-create table discount_coupon (
-id int primary key AUTO_INCREMENT,
-VipTierRequired int ,
-TimeStart timestamp,
-TimeEnd timestamp,
-Dicount int,
-DiscountUnit varchar(255),
-AdminID int,
-CreatedTime timestamp,
-FOREIGN KEY (AdminID) REFERENCES admin(id)
+CREATE TABLE discount_coupon (
+	id int primary key AUTO_INCREMENT,
+	VipTierRequired int ,
+	TimeStart timestamp,
+	TimeEnd timestamp,
+	Dicount int,
+	DiscountUnit varchar(255),
+	AdminID int,
+	CreatedTime timestamp,
+	FOREIGN KEY (AdminID) REFERENCES admin(id)
 );
 
 CREATE TABLE Conference (
@@ -71,14 +71,14 @@ CREATE TABLE Conference (
 	FOREIGN KEY (id) REFERENCES academic_event(id)
 );
 
-create table journal (
+CREATE TABLE journal (
 	id int primary key,
     association varchar(255),
     level int,
     FOREIGN KEY (id) REFERENCEs academic_event(id)
 );
 
-create table reader(
+CREATE TABLE reader(
 	id int primary key,
     creditcard varchar(255),
     VipTier int check (Viptier>=0),
@@ -86,14 +86,14 @@ create table reader(
     FOREIGN KEY (CartID) REFERENCES cart(id)
 );
 
-create table paper (
+CREATE TABLE paper (
 	id int primary key,
 	EventID int,
     	FOREIGN KEY (id) REFERENCES science_article(id),
 	FOREIGN KEY (EventID) REFERENCES academic_event(id)
 );
 
-create table technical_report (
+CREATE TABLE technical_report (
 	id int primary key,
 	`organization` varchar(255),
 	FOREIGN KEY (id) REFERENCES science_article(id)
@@ -280,9 +280,6 @@ CREATE TABLE DISCOUNT_ON_SUBCATEGORY(
     FOREIGN KEY (SubcategoryCouponID) REFERENCES article_subcategory_discount_coupon(id),
     FOREIGN KEY (CategoryName, SubcategoryName) REFERENCES subcategory(CategoryName, SubcategoryName)
 );
-
-
-// Nãy t đổi trường CartID của Cart thành id rồi á
 
 CREATE TABLE CART_HAS_ARTICLE(
     CartID int,
