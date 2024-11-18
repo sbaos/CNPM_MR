@@ -152,11 +152,11 @@ CREATE TABLE ARTICLE_CITE_ARTICLE(
 
 CREATE TABLE READER_HAS_DISCOUNT_COUPON(
 	ReaderID int,
-    CoupinID INT ,
+    CouponID INT ,
     `use` bool,
-    PRIMARY KEY (ReaderID,CoupinID),
+    PRIMARY KEY (ReaderID,CouponID),
     FOREIGN KEY (ReaderID) REFERENCES reader(id),
-	FOREIGN KEY (CoupinID) REFERENCES discount_coupon(id)
+	FOREIGN KEY (CouponID) REFERENCES discount_coupon(id)
 );
 
 CREATE TABLE PAYMENT_DISCOUNT_COUPON(
