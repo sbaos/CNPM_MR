@@ -1,47 +1,44 @@
-CREATE TABLE SCIENCE_ARTICLE (
+create table SCIENCE_ARTICLE (
 	id int primary key AUTO_INCREMENT,
-    Title varchar(255) not null,
-    PublishDate timestamp,
+    Titlacademic_evente varchar(255) not null,
+    PublishDate date,
     GithubCode varchar(255),
     link varchar(255),
     LastModified timestamp,
-    Price decimal(10,2),
-    UNIQUE (GithubCode),
-    UNIQUE (Title) 
+    Price decimal(10,2)
 );
 
-CREATE TABLE Author (
-	orcid int primary key,
-    BirthDate timestamp,
+create table Author (
+	orcid int primary key AUTO_INCREMENT,
+    BirthDate date,
     PenName Varchar(255),
     Lname varchar(255),
     Fname varchar(255),
     DomainConflict varchar(255)
 );
 
-CREATE TABLE user (
+create table user (
 	id int primary key AUTO_INCREMENT,
     Username varchar(255) not null,
-    Hashpassword varchar(255),
-	UNIQUE (Username )
+    Hashpassword varchar(255)
 );
 
-CREATE TABLE cart (
+create table cart (
 id int primary key AUTO_INCREMENT
 );
 
 CREATE TABLE Academic_Event (
-    id INT PRIMARY KEY ,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     year INT NOT NULL CHECK (year >= 0)
 );
 
-CREATE TABLE Category (
+create table Category (
 CategoryName varchar(255) primary key,
 Description varchar(255)
 );
 
-CREATE TABLE dataset(
+create table dataset(
 	name varchar(255) primary key,
     Description varchar(255),
     size varchar(255)
@@ -51,49 +48,50 @@ CREATE TABLE admin (
     FOREIGN KEY (id) REFERENCES user(id)
 );
 
-CREATE TABLE discount_coupon (
-	id int primary key AUTO_INCREMENT,
-	VipTierRequired int ,
-	TimeStart timestamp,
-	TimeEnd timestamp,
-	Dicount int,
-	DiscountUnit varchar(255),
-	AdminID int,
-	CreatedTime timestamp,
-	FOREIGN KEY (AdminID) REFERENCES admin(id)
+
+create table discount_coupon (
+id int primary key AUTO_INCREMENT,
+VipTierRequired int ,
+TimeStart timestamp,
+TimeEnd timestamp,
+Dicount float,
+DiscountUnit enum("%", "$"),
+AdminID int,
+CreatedTime timestamp,
+FOREIGN KEY (AdminID) REFERENCES admin(id)
 );
 
 CREATE TABLE Conference (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     area VARCHAR(255) NOT NULL,
     sponsors VARCHAR(255),
-    `rank` INT CHECK (`rank` >= 0),
+    `rank` ENUM('A*','A','B','C','D'),
 	FOREIGN KEY (id) REFERENCES academic_event(id)
 );
 
-CREATE TABLE journal (
+create table journal (
 	id int primary key,
     association varchar(255),
-    level int,
+    level enum('Q1','Q2','Q3','Q4'),
     FOREIGN KEY (id) REFERENCEs academic_event(id)
 );
 
-CREATE TABLE reader(
+create table reader(
 	id int primary key,
     creditcard varchar(255),
-    VipTier int check (Viptier>=0),
+    VipTier enum('0','1','2','3','4','5'),
     CartID int,
     FOREIGN KEY (CartID) REFERENCES cart(id)
 );
 
-CREATE TABLE paper (
-	id int primary key,
+create table paper (
+	id int primary key AUTO_INCREMENT,
 	EventID int,
-    	FOREIGN KEY (id) REFERENCES science_article(id),
+	FOREIGN KEY (id) REFERENCES science_article(id),
 	FOREIGN KEY (EventID) REFERENCES academic_event(id)
 );
 
-CREATE TABLE technical_report (
+create table technical_report (
 	id int primary key,
 	`organization` varchar(255),
 	FOREIGN KEY (id) REFERENCES science_article(id)
@@ -152,11 +150,11 @@ CREATE TABLE ARTICLE_CITE_ARTICLE(
 
 CREATE TABLE READER_HAS_DISCOUNT_COUPON(
 	ReaderID int,
-    CouponID INT ,
+    CoupinID INT ,
     `use` bool,
-    PRIMARY KEY (ReaderID,CouponID),
+    PRIMARY KEY (ReaderID,CoupinID),
     FOREIGN KEY (ReaderID) REFERENCES reader(id),
-	FOREIGN KEY (CouponID) REFERENCES discount_coupon(id)
+	FOREIGN KEY (CoupinID) REFERENCES discount_coupon(id)
 );
 
 CREATE TABLE PAYMENT_DISCOUNT_COUPON(
@@ -281,6 +279,7 @@ CREATE TABLE DISCOUNT_ON_SUBCATEGORY(
     FOREIGN KEY (CategoryName, SubcategoryName) REFERENCES subcategory(CategoryName, SubcategoryName)
 );
 
+
 CREATE TABLE CART_HAS_ARTICLE(
     CartID int,
     ArticleID int,
@@ -296,4 +295,3 @@ CREATE TABLE COLLECTION_CONTAIN_ARTICLE(
     FOREIGN KEY (ReaderID,`Name`) REFERENCES collection(ReaderID,`Name`),
     FOREIGN KEY (ArticleID) REFERENCES science_article(id)
 );
-
