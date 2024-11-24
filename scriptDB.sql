@@ -1,6 +1,6 @@
 create table SCIENCE_ARTICLE (
 	id int primary key AUTO_INCREMENT,
-    Titlacademic_evente varchar(255) not null,
+    Title varchar(255) not null,
     PublishDate date,
     GithubCode varchar(255),
     link varchar(255),
