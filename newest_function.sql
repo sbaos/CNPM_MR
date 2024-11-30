@@ -1,5 +1,6 @@
-DELIMITER //
 
+drop function if EXISTS CALCULATE_SUM_MONEY_OF_PAYMENT_BEFORE_APPLY_COUPON ;
+DELIMITER //
 CREATE FUNCTION CALCULATE_SUM_MONEY_OF_PAYMENT_BEFORE_APPLY_COUPON(P_ID int) 
 RETURNS decimal(10,2) DETERMINISTIC
 BEGIN
@@ -14,7 +15,7 @@ END //
 
 DELIMITER ;
 
-
+drop function if EXISTS CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ARTICLE_DC ;
 DELIMITER //
 
 CREATE FUNCTION CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ARTICLE_DC(PI_ID INT) 
@@ -65,6 +66,7 @@ END //
 
 DELIMITER ;
 
+drop function if EXISTS CAL_SUM_MONEY_DISCOUNT_ON_P_AFTER_APPLY_COSTB_DC ;
 
 DELIMITER //
 
@@ -99,37 +101,7 @@ END //
 
 DELIMITER ;
 
-
-
--- DELIMITER //
-
--- CREATE FUNCTION CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ASD_ON_P(PI_ID INT) 
--- RETURNS DECIMAL(10,2) DETERMINISTIC
--- BEGIN
---     DECLARE total_discounted_price DECIMAL(10,2);
---     select  IFNULL(sum(DiscountedPrice),0) as Total
---     into total_discounted_price
--- from 
--- (
--- select Discount, DiscountUnit,  Price,
--- 	  CASE 
---                 WHEN DiscountUnit = '$' THEN Discount
---                 WHEN DiscountUnit = '%' THEN (Discount * Price / 100)
---                 ELSE 0
--- 	END AS DiscountedPrice
--- from (
--- select  Discount as Discount, DiscountUnit, Price
--- from payment_item as pi 
--- join discount_on_payment as dop on dop.PaymentID = pi.PaymentID
--- join discount_coupon as dc on dop.PaymentCounponID = dc.id
--- join discount_on_subcategory as dos on dos.SubcategoryCouponID = dc.id 
--- join science_article as sa on sa.id = pi.ArticleID 
--- join article_categorize_subcategory as acs on acs.ArticleID = sa.id and acs.SubcategoryName = dos.SubcategoryName and acs.CategoryName = dos.CategoryName
--- where pi.id = PI_ID) as A) as B;
---     RETURN total_discounted_price;
--- END //
-
--- DELIMITER ;
+drop function if EXISTS CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ASD_ON_P ;
 
 DELIMITER //
 
@@ -141,33 +113,31 @@ BEGIN
     SELECT IFNULL(SUM(DiscountedPrice), 0) AS Total
     INTO total_discounted_price
     FROM (
-        SELECT 
-            Discount, 
-            DiscountUnit, 
-            Price,
-            CASE 
-                WHEN DiscountUnit = '$' THEN Discount
-                WHEN DiscountUnit = '%' THEN (Discount * Price / 100)
-                ELSE 0
-            END AS DiscountedPrice
-        FROM (
-            SELECT 
-                MAX(dos.Discount) AS Discount, 
-                MAX(dos.DiscountUnit) AS DiscountUnit, 
-                pi.Price AS Price
-            FROM payment_item AS pi
-            JOIN discount_on_payment AS dop ON dop.PaymentID = pi.PaymentID
-            JOIN discount_coupon AS dc ON dop.PaymentCounponID = dc.id
-            JOIN discount_on_subcategory AS dos ON dos.SubcategoryCouponID = dc.id
-            JOIN science_article AS sa ON sa.id = pi.ArticleID
-            JOIN article_categorize_subcategory AS acs 
-                ON acs.ArticleID = sa.id 
-                AND acs.SubcategoryName = dos.SubcategoryName 
-                AND acs.CategoryName = dos.CategoryName
-            WHERE pi.id = PI_ID
-            GROUP BY pi.id, dos.CategoryName, dos.SubcategoryName
-        ) AS GroupedDiscounts
-    ) AS CalculatedDiscounts;
+        
+  
+     select Price,Discount,DiscountUnit,
+ 	  CASE 
+                 WHEN DiscountUnit = '$' THEN Discount
+                 WHEN DiscountUnit = '%' THEN (Discount * Price / 100)
+                 ELSE 0
+END AS DiscountedPrice
+from (
+SELECT 
+    AVG(Price) AS Price,
+    AVG(Discount) AS Discount,
+    DiscountUnit
+FROM payment_item AS pi
+JOIN discount_on_payment AS dop ON dop.PaymentID = pi.PaymentID
+JOIN discount_coupon AS dc ON dop.PaymentCounponID = dc.id
+JOIN discount_on_subcategory AS dos ON dos.SubcategoryCouponID = dc.id
+JOIN science_article AS sa ON sa.id = pi.ArticleID
+JOIN article_categorize_subcategory AS acs 
+    ON acs.ArticleID = sa.id 
+    AND acs.SubcategoryName = dos.SubcategoryName 
+    AND acs.CategoryName = dos.CategoryName
+WHERE pi.id = PI_ID
+GROUP BY dop.PaymentCounponID, DiscountUnit
+) as A) as B;
     
     RETURN total_discounted_price;
 END //
@@ -175,6 +145,7 @@ END //
 DELIMITER ;
 
 
+drop function if EXISTS CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_PAEDC_ON_P ;
 
 
 DELIMITER //
@@ -207,7 +178,7 @@ END //
 
 DELIMITER ;
 
-
+drop function CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON;
 DELIMITER //
 
 CREATE FUNCTION CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(P_ID INT) 
@@ -255,4 +226,5 @@ END //
 
 DELIMITER ;
 
-select CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(2),CALCULATE_SUM_MONEY_OF_PAYMENT_BEFORE_APPLY_COUPON(2);
+
+select CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(2);
