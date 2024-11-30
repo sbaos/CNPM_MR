@@ -126,7 +126,7 @@ const updateArticle = async (req,res) => {
                 data.push({
                     success : true,
                     db_message : 'Updating Title field success',
-                    data : title_data
+                    data : title_data[0]
                 })
             }
         }
@@ -150,7 +150,7 @@ const updateArticle = async (req,res) => {
                 data.push({
                     success : true,
                     db_message : 'Updating Publish Date field success',
-                    data : publish_date_data
+                    data : publish_date_data[0]
                 })
             }
         }
@@ -174,7 +174,7 @@ const updateArticle = async (req,res) => {
                 data.push({
                     success : true,
                     db_message : 'Updating github field success',
-                    data : github_data
+                    data : github_data[0]
                 })
             }
         }
@@ -198,7 +198,7 @@ const updateArticle = async (req,res) => {
                 data.push({
                     success : true,
                     db_message : 'Updating link field success',
-                    data : link_data
+                    data : link_data[0]
                 })
             }
         }
