@@ -98,7 +98,6 @@ const addScienceArticle = async (req,res) => {
             error
         })
     }
-
 }
 
 
