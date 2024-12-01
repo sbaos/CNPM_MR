@@ -32,7 +32,7 @@ router.post('/user/login' ,  userLogin)
 router.get('/cart/getall/reader/:id' , getAllArticleByReaderID)
 
 //ADD ARTICLE TO CART
-router.put('/cart/add/:cartID' ,addArticleToCart)
+router.post('/cart/add/:cartID' ,addArticleToCart)
 
 //REMOVE ARTICLE FROM CART
 router.delete('/cart/remove/:cartID' , removeArticlefromCart)
