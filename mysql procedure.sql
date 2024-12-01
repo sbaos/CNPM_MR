@@ -175,7 +175,8 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error deleting article';
     END;
 
-    DELETE FROM science_article
+    UPDATE science_article
+    SET deleteAt = 1 
     WHERE id = article_id;
 
 END //
