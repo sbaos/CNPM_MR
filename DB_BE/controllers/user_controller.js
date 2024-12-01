@@ -69,6 +69,65 @@ const createReader = async (req,res) => {
 
 
 
+const userLogin = async (req,res) => {
+    try {
+        const {Username , Password} = req.body
+        const user_data = await db.query(`SELECT * FROM user WHERE Username LIKE ?`,['%' + Username+'%'])
+        if (!user_data[0].length){
+            return res.status(404).send({
+                success : false ,
+                message : 'User not found'
+            })
+        }
+        const isMatchPassword = await bcrypt.compare(Password,user_data[0][0].Hashpassword,)
+        if (!isMatchPassword){
+            return res.status(403).send({
+                success : false,
+                message : 'Username/Password invalid'
+            })
+        }
+        else{
+            const check = await db.query(`SELECT * FROM reader WHERE id = ? ` , [user_data[0][0].id])
+            if (!check[0].length){
+            return res.status(200).send({
+                success : true ,
+                message : 'Login success',
+                data : {
+                    id : user_data[0][0].id,
+                    Username : user_data[0][0].Username,
+                    role : 'admin'
+                }
+            })
+        }
+        else{
+            return res.status(200).send({
+                success : true ,
+                message : 'Login success',
+                data : {
+                    id : check[0][0].id,
+                    Username : check[0][0].Username,
+                    creditcard : check[0][0].creditcard,
+                    VipTier : check[0][0].VipTier,
+                    CartID : check[0][0].CartID,
+                    role : 'reader',
+                }
+            })    
+        }
+        }
+
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success : false ,
+            message : 'Login API failed',
+            error
+        })
+    }
+}
 
 
-module.exports = {createAdmin , createReader}
+
+
+
+module.exports = {createAdmin , createReader , userLogin}

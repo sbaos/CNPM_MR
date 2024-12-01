@@ -1,6 +1,6 @@
 const express = require('express');
 const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle } = require('../controllers/science_article_controller');
-const { createAdmin ,createReader } = require('../controllers/user_controller');
+const { createAdmin ,createReader, userLogin } = require('../controllers/user_controller');
 
 const router = express.Router()
 
@@ -22,6 +22,9 @@ router.post('/admin/create' , createAdmin)
 
 //CREATE READER
 router.post('/reader/create' , createReader)
+
+//LOGIN 
+router.post('/user/login' ,  userLogin)
 
 
 module.exports = router
