@@ -2,7 +2,7 @@ const express = require('express');
 const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle, getFilteredArticles } = require('../controllers/science_article_controller');
 const { createAdmin ,createReader, userLogin } = require('../controllers/user_controller');
 const { getAllArticleByReaderID, addArticleToCart, removeArticlefromCart } = require('../controllers/cart_controller');
-const { createPaymentWithReaderID, createPaymentWithReaderIDv2 } = require('../controllers/payment_controller');
+const { createPaymentWithReaderID, createPaymentWithReaderIDv2, getAllPaymentHistory } = require('../controllers/payment_controller');
 const { getAllAppliableCouponByReader } = require('../controllers/coupon_controller');
 
 const router = express.Router()
@@ -49,6 +49,10 @@ router.get('/coupon/appliable/:ReaderID' , getAllAppliableCouponByReader)
 
 //CREATE PAYMENT
 router.post('/payment/create/:ReaderID' ,  createPaymentWithReaderIDv2)
+
+
+//GET PAYMENT
+router.get('/payment/getall/:ReaderID' ,  getAllPaymentHistory)
 
 
 

@@ -140,7 +140,18 @@ const createPaymentWithReaderIDv2 = async (req,res) => {
     }
 }
 
+const getAllPaymentHistory = async (req,res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error),
+        res.status(500).send({
+            success : false,
+            message : 'error in get all payment history ',
+            error
+        })
+    }
+}
 
 
-
-module.exports = {createPaymentWithReaderID , createPaymentWithReaderIDv2}
+module.exports = {createPaymentWithReaderID , createPaymentWithReaderIDv2 , getAllPaymentHistory}
