@@ -11,7 +11,7 @@ function CartPage() {
     const [selectedArticles, setSelectedArticles] = useState([]);
     const [isAllChecked, setAllChecked] = useState(false); // State for "Check All"
     const [articleUseCoupons, setArticleUseCoupons] = useState([{ ArticleID: 3, CouponID: [] }]);
-
+    const sa = useSelector(state => state.sa.list);
     const addSelectedArticles = async () => {
         const cartID = user.cartId;
         // Add logic for adding articles to the cart if needed
@@ -56,13 +56,16 @@ function CartPage() {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            setItems(data.data?.map((item) => { return { ...item, isDeleted: false } }));
+            const info = sa.filter(saItem =>
+                data?.data?.some(dataItem => dataItem.id === saItem.id)
+            );
+            setItems(info?.map((item) => { return { ...item, isDeleted: false } }));
             console.log(data);
         } catch (error) {
             console.error("Error fetching cart:", error.message);
         }
     };
-    console.log(articleUseCoupons);
+    console.log(items);
     useEffect(() => {
         getCart();
     }, [user]);

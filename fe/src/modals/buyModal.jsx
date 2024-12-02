@@ -20,45 +20,110 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
     const [type, setType] = useState('article');
 
     function convertToNumber(priceString) {
-        return parseFloat(priceString.replace('$', ''));
+        return parseFloat(priceString);
+
+        // return parseFloat(priceString.replace('$', ''));
     }
     function calcuBasePrice() {
-        return items.reduce((acc, item) => acc + parseFloat(item.Price.replace("$", "")), 0).toFixed(2)
+        return items?.reduce((acc, item) => acc + parseFloat(item.Price.replace("$", "")), 0).toFixed(2)
     }
-    function calculateFinalPrice_Sub(item, coupn) {
-
+    function calculateFinalPrice_SubofItem(item) {
+        const coupon = paymentCoupons?.filter(coupon => coupon.coupon_type === "discount_on_subcategory");
+        console.log(coupon);
+        console.log(item);
+        let canuse = coupon?.filter(coupon =>
+            item?.subcategory?.some(sub =>
+                coupon?.subcategory?.some(couponSub => couponSub.SubcategoryName === sub.SubcategoryName)
+            )
+        );
+        console.log(canuse);
+        console.log(paymentUseCoupons);
+        canuse = canuse?.filter(coupon => paymentUseCoupons.includes(coupon.id));
+        console.log(canuse);
+        let sum = 0;
+        for (let i = 0; i < canuse.length; i++) {
+            if (canuse?.[i]?.DiscountUnit === '%')
+                sum += (item.Price * (canuse[i].Discount / 100));
+            else
+                sum += canuse?.[i]?.Discount;
+        }
+        console.log(sum);
+        return sum;
     }
-    function calculateFinalPrice_Aca(item, coupn) {
+    function calculateFinalPrice_AcaofItem(item) {
+        const coupon = paymentCoupons?.filter(coupon => coupon.coupon_type === "discount_on_academic_event");
+        let canuse = coupon?.filter(coupon =>
+            item?.academic_event?.some(event =>
+                coupon?.academic_event?.some(couponEvent => couponEvent.id === event.id)
+            )
+        );
 
+        canuse = canuse?.filter(coupon => paymentUseCoupons.includes(coupon.id));
+        console.log(canuse);
+        let sum = 0;
+        for (let i = 0; i < canuse.length; i++) {
+            if (canuse[i].DiscountUnit === '%')
+                sum += (item.price * (canuse[i].Discount / 100));
+            else
+                sum += canuse[i].Discount;
+        }
+        return sum;
     }
     function calculateFinalPrice_AP_All() {
         return calFinalPrice() - calculateCosBaseDiscount()
     }
     function calculateCosBaseDiscount() {
-        let coupon = coupons.filter(coupon => paymentUseCoupons.includes(coupon.id));
+        let coupon = coupons?.filter(coupon => paymentUseCoupons.includes(coupon.id));
+        coupon = coupon.filter(item => item.coupon_type === "cost_base_discount")
         let totalP = 0;
         let totalS = 0;
         const basePrice = calcuBasePrice();
         for (let i = 0; i < coupon.length; i++) {
-            if (coupon[i].DiscountUnit === '%')
+            if (coupon?.[i]?.DiscountUnit === '%')
                 totalP += coupon[i].Discount * basePrice / 100;
             else
-                totalS += coupon[i].Discount
+                totalS += coupon?.[i]?.Discount
         }
         return totalP + totalS;
-        console.log(coupon)
+    }
+    const calFinalPrice = (price) => {
+        const coupon = items.map((item) =>
+            getCouponsForArticle(
+                coupons,
+                item?.id,
+                articleUseCoupons.filter(a =>
+                    a.ArticleID === item.id)?.[0]?.CouponID));
+        console.log(coupon);
+
+        let itemPrice = items.map((item, index) => calculateFinalPrice(item, coupon[index]));
+        console.log(itemPrice);
+        let sum = itemPrice.reduce((acc, item) => acc + item, 0);
+
+        return sum;
+
+    }
+    const calItemACP = (item) => {
+        const coupon = getCouponsForArticle(
+            coupons,
+            item?.id,
+            articleUseCoupons.filter(a =>
+                a.ArticleID === item.id)?.[0]?.CouponID);
+        return calculateFinalPrice(item, coupon);
+
     }
     function calculateFinalPrice(item, coupons) {
-        let finalPrice = convertToNumber(item.Price);  // Start with the original price of the item
+        let finalPrice = item.Price;  // Start with the original price of the item
         articleUseCoupons.filter(a => a.ArticleID === item.id)
 
         // Filter coupons that apply to the specific item
-        const applicableCoupons = coupons.filter(coupon =>
+        const applicableCoupons = coupons?.filter(coupon =>
             coupon.ArticleID === item.id  // Check if the coupon is for this article
         );
+        console.log(finalPrice);
         console.log(applicableCoupons)
+        if (!applicableCoupons?.length) return finalPrice;
         // Apply each applicable coupon to the final price
-        applicableCoupons.forEach(coupon => {
+        applicableCoupons?.forEach(coupon => {
             if (coupon.DiscountUnit === '%') {
                 // If it's a percentage discount, reduce the price by the percentage
                 finalPrice -= finalPrice * (coupon.Discount / 100);
@@ -70,6 +135,18 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
 
         // Ensure the final price doesn't drop below zero
         return Math.max(finalPrice, 0);
+    }
+    const finalPrice = () => {
+        const itemPrice = items.map((item) =>
+            Math.max(
+                calculateFinalPrice(item, coupons)
+                - calculateFinalPrice_AcaofItem(item)
+                - calculateFinalPrice_SubofItem(item)
+                , 0
+            )
+        );
+        console.log(itemPrice);
+        return itemPrice.reduce((acc, item) => acc + item, 0) - calculateCosBaseDiscount();
     }
     const getCoupon = async () => {
         try {
@@ -94,22 +171,7 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
         );
     }
 
-    const calFinalPrice = (price) => {
-        const coupon = items.map((item) =>
-            getCouponsForArticle(
-                coupons,
-                item?.id,
-                articleUseCoupons.filter(a =>
-                    a.ArticleID === item.id)?.[0]?.CouponID));
-        console.log(coupon);
 
-        let itemPrice = items.map((item, index) => calculateFinalPrice(item, coupon[index]));
-        console.log(itemPrice);
-        let sum = itemPrice.reduce((acc, item) => acc + item, 0);
-
-        return sum;
-
-    }
     const changePaymentUseCoupons = (couponID, action = 'add') => {
         if (action === 'add') {
             setPaymentUseCoupons([...paymentUseCoupons, couponID]);
@@ -278,7 +340,7 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
                                             Base price: {calcuBasePrice()}$
                                         </div>
                                         <div className="text-center text-red-500">
-                                            Final price: {calculateFinalPrice_AP_All()}$
+                                            Final price: {finalPrice()}$
                                         </div>
                                     </div>
                                 </div>
@@ -301,12 +363,6 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
                             >
                                 Buy
                             </button>
-
-                            {/* {JSON.stringify(calculateCosBaseDiscount())}
-                            <br />
-                            {JSON.stringify(paymentUseCoupons)}
-                            <br />
-                            {JSON.stringify(articleUseCoupons)} */}
                         </div>
                     </div>
                 </div >
