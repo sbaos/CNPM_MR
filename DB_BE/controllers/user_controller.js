@@ -49,7 +49,8 @@ const createReader = async (req,res) => {
         const hashPassword = await bcrypt.hash(Password,saltRounds)
         const user_data = await db.query(`INSERT INTO user(Username,Hashpassword) VALUES(?,?)` , [Username,hashPassword])
         const cart_data = await db.query(`INSERT INTO cart VALUES()`)
-        const reader_data = await db.query(`INSERT INTO reader(id,creditcard,VipTier,CartID) VALUES(?,?,?,?)` , [user_data[0].insertId,creditcard,VipTier,cart_data[0].insertId])
+
+        const reader_data = await db.query(`INSERT INTO reader(id,creditcard,VipTier,CartID) VALUES(?,?,?,?)` , [user_data[0].insertId,creditcard,VipTier? VipTier.toString() : '0',cart_data[0].insertId])
         res.status(201).send({
             success : true ,
             message : 'create reader success',

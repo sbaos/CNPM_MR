@@ -305,7 +305,6 @@ const deleteArticle = async (req,res) => {
 
 const getFilteredArticles = async (req, res) => {
     try {
-        console.log('Vaicaloz')
         const {
             author,
             title,
@@ -314,7 +313,7 @@ const getFilteredArticles = async (req, res) => {
             subcategory,
             pricemin,
             pricemax,
-        } = req.params;
+        } = req.query;
         const data = await db.query(
             `CALL filter_science_article(?,?,?,?,?,?,?)`,
             [

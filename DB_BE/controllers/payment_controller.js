@@ -21,7 +21,7 @@ async function createPaymentItemv2(item,paymentid) {
         const payment_item = await db.query(`INSERT INTO payment_item(ArticleID,PaymentID) VALUES(?,?)` , [item.ArticleID,paymentid])
         const PaymentItemID = payment_item[0].insertId
         for (const coupon of item.CouponID){
-            const response = await db.query(`INSERT INTO discount_on_payment_item(ArticleCouponID,PaymentItemID) VALUES(?,?)` , [coupon,PaymentItemID])
+            const response = await db.query(`INSERT INTO discount_on_payment_item(ArticleCounponID,PaymentItemID) VALUES(?,?)` , [coupon,PaymentItemID])
         }
 
         return {
@@ -111,11 +111,11 @@ const createPaymentWithReaderIDv2 = async (req,res) => {
         const payment_item = await Promise.all(payment_item_promises)
 
 
-        const discount_payment_promises = paymentApply.map(item => applyPaymentDiscount(item,paymentid))
+        const discount_payment_promises = paymentApply.map(item => applyPaymentDiscount(item,PaymentID))
         const discount_payment = await Promise.all(discount_payment_promises)
 
 
-        const update_payment_status_data = await db.query(`UPDATE payment SET status = 'Sucessfull' WHERE id = ?` , [PaymentID])
+        const update_payment_status_data = await db.query(`UPDATE payment SET status = 'success' WHERE id = ?` , [PaymentID])
 
 
 
