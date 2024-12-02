@@ -1,5 +1,27 @@
 const db = require("../config/db");
 
+async function getSAHelper(item) {
+    try {
+        const subcategory_data = await db.query(`SELECT * FROM article_categorize_subcategory WHERE ArticleID = ? ` , [item.id])
+
+        const academic_event_data = await db.query(`SELECT academic_event.id , academic_event.name , academic_event.year 
+            FROM PAPER JOIN academic_event ON paper.EventID = academic_event.id
+            WHERE paper.id = ? ` , [item.id])
+
+        const res = {...item,subcategory : subcategory_data[0] , academic_event : academic_event_data[0]}
+
+        return res
+        
+        
+    } catch (error) {
+        console.log(error)
+        return {
+            success : false ,
+            message : 'error in SA helper function'
+        }
+    }
+}
+
 const getScienceArticle =  async (req,res) => {
     try {
         const data = await db.query('SELECT * FROM SCIENCE_ARTICLE');
@@ -10,10 +32,14 @@ const getScienceArticle =  async (req,res) => {
 
             })
         }
+
+        const promises = data[0].map(item => getSAHelper(item) )
+        const response_data = await Promise.all(promises)
+
         res.status(200).send({
             success : true , 
             message : 'All science article records',
-            data : data[0],
+            data : response_data,
         })
     } catch (error) {
         console.log(error);
