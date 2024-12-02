@@ -64,7 +64,7 @@ const getAllAppliableCouponByReader = async (req,res) => {
         const discount_on_academic_event_data = await Promise.all(discount_on_academic_event_data_promise)
 
         const discount_on_subcategory = await db.query(`SELECT *
-            FROM  (reader_has_discount_coupon JOIN discount_coupon ON reader_has_discount_coupon.CoupinID = discount_coupon.id) JOIN discount_on_subcategory ON reader_has_discount_coupon.CoupinID = discount_on_subcategory.SubcategoryCouponID
+            FROM  reader_has_discount_coupon JOIN discount_coupon ON reader_has_discount_coupon.CoupinID = discount_coupon.id
             WHERE reader_has_discount_coupon.ReaderID = ? AND reader_has_discount_coupon.use = 0 AND VipTierRequired <= ? ` , [ReaderID,VipTier])
             
         

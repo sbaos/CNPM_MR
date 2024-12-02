@@ -143,6 +143,7 @@ const createPaymentWithReaderIDv2 = async (req,res) => {
 const getAllPaymentHistory = async (req,res) => {
     try {
         
+        
     } catch (error) {
         console.log(error),
         res.status(500).send({
