@@ -303,4 +303,57 @@ const deleteArticle = async (req,res) => {
 
 }
 
-module.exports = {getScienceArticle,getScienceArticleByID , addScienceArticle , updateArticle , deleteArticle}
+const getFilteredArticles = async (req, res) => {
+    try {
+        console.log('Vaicaloz')
+        const {
+            author,
+            title,
+            year,
+            academic_event_name,
+            subcategory,
+            pricemin,
+            pricemax,
+        } = req.params;
+        const data = await db.query(
+            `CALL filter_science_article(?,?,?,?,?,?,?)`,
+            [
+                author ? author : null,
+                title ? title : null,
+                year ? year : null,
+                academic_event_name ? academic_event_name : null,
+                subcategory ? subcategory : null,
+                pricemin ? pricemin : null,
+                pricemax ? pricemax : null,
+            ]
+        );
+        if (!data) {
+            return res.status(404).send({
+                success: false,
+                message: "Error in get filtered articles",
+            });
+        }
+
+        res.status(201).send({
+            success: true,
+            message: "Susccessfully filtered articles",
+            data: data[0],
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error in get filtered articles API",
+            error,
+        });
+    }
+};
+
+module.exports = {
+    getScienceArticle,
+    getScienceArticleByID,
+    addScienceArticle,
+    updateArticle,
+    deleteArticle,
+    getFilteredArticles,
+};
