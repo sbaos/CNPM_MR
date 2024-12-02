@@ -115,7 +115,6 @@ FOR EACH ROW
 BEGIN
     DECLARE TOTAL DECIMAL(10, 2);
     DECLARE READER_ID INT;
-
     IF NEW.status = 'success' THEN
 
         -- Get the reader ID from the updated payment row
@@ -125,8 +124,10 @@ BEGIN
         WHERE id = NEW.id;
 
         -- Calculate total sum after applying all coupons
-        SELECT SUM(CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(NEW.id))
-        INTO TOTAL;
+        SELECT SUM(CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(id))
+        INTO TOTAL
+	FROM PAYMENT
+	WHERE readerid=READER_ID;
 
         -- Insert debugging info into log table
       
