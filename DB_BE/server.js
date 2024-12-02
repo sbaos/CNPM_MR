@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mySqlPool = require('./config/db');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 //config dotenv
 dotenv.config();
@@ -13,6 +14,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended : true}));
 
