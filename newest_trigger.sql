@@ -81,7 +81,6 @@ END //
 DELIMITER ;
 
 -- drop trigger CHECK_BEFORE_ADD_DISCOUNT_ON_PAYMENT;
-
 DELIMITER //
 
 CREATE TRIGGER ADD_SUB_TO_DATA_WHEN_BENCHMARK_SUCCESS
@@ -89,7 +88,7 @@ AFTER INSERT ON article_benchmark_dataset
 FOR EACH ROW
 BEGIN
     -- Only proceed if the result column is "success"
-    IF NEW.result = 'success' THEN
+    IF NEW.result is not null THEN
         INSERT INTO dataset_for_subcategory (DatasetName, CategoryName, SubcategoryName)
         SELECT NEW.DatasetName, 
                s.CategoryName, 
@@ -106,6 +105,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
 
 DELIMITER //
 
