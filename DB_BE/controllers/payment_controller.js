@@ -142,6 +142,15 @@ const createPaymentWithReaderIDv2 = async (req,res) => {
 
 const getAllPaymentHistory = async (req,res) => {
     try {
+        const ReaderID = req.params.ReaderID
+        const {time_start,time_end,min_price,max_price,order_flag} = req.query
+        const data = await db.query(`CALL get_payment_history(?,?,?,?,?,?)` , [ReaderID,time_start,time_end,min_price,max_price,order_flag])
+
+        res.status(200).send({
+            success : true ,
+            message : 'get payment history successfully',
+            data : data[0][0]
+        })
         
         
     } catch (error) {
