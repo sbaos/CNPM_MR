@@ -3,6 +3,7 @@ const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArtic
 const { createAdmin ,createReader, userLogin } = require('../controllers/user_controller');
 const { getAllArticleByReaderID, addArticleToCart, removeArticlefromCart } = require('../controllers/cart_controller');
 const { createPaymentWithReaderID } = require('../controllers/payment_controller');
+const { getAllAppliableCouponByReader } = require('../controllers/coupon_controller');
 
 const router = express.Router()
 
@@ -39,6 +40,9 @@ router.delete('/cart/remove/:cartID' , removeArticlefromCart)
 
 //CREATE PAYMENT WITH CART ID
 router.post(`/cart/payment/:ReaderID` ,  createPaymentWithReaderID)
+
+//GET ALL APPLIABLE COUPON BY USER
+router.get('/coupon/appliable/:ReaderID' , getAllAppliableCouponByReader)
 
 
 module.exports = router
