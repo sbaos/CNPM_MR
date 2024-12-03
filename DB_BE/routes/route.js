@@ -1,5 +1,5 @@
 const express = require('express');
-const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle, getFilteredArticles } = require('../controllers/science_article_controller');
+const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle, getFilteredArticles, getBoughtScienceArticle } = require('../controllers/science_article_controller');
 const { createAdmin ,createReader, userLogin, userChangePassword } = require('../controllers/user_controller');
 const { getAllArticleByReaderID, addArticleToCart, removeArticlefromCart } = require('../controllers/cart_controller');
 const { createPaymentWithReaderID, createPaymentWithReaderIDv2, getAllPaymentHistory } = require('../controllers/payment_controller');
@@ -13,6 +13,8 @@ router.get('/science_article/:ReaderID' , getScienceArticle )
 router.get('/science_article/filtered' , getFilteredArticles)
 
 router.get('/science_article/:id' , getScienceArticleByID )
+
+router.get('/bought_science_article/:ReaderID' , getBoughtScienceArticle )
 
 // add paper 
 router.post('/science_article/add' , addScienceArticle  )

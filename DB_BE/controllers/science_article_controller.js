@@ -59,6 +59,45 @@ const getScienceArticle =  async (req,res) => {
 
 
 
+const getBoughtScienceArticle =  async (req,res) => {
+    try {
+        const ReaderID = req.params.ReaderID
+        const data = await db.query('SELECT * FROM SCIENCE_ARTICLE');
+        if (!data){
+            return res.status(404).send({
+                success : false,
+                message : 'No records found',
+
+            })
+        }
+
+        const promises = data[0].map(item => getSAHelper(item,ReaderID) )
+        const response_data = await Promise.all(promises)
+        
+        const result = await response_data.filter(item => item.hasBuy == true)
+
+        res.status(200).send({
+            success : true , 
+            message : 'All science article records',
+            data : result,
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success : false,
+            message : 'Error in get all science articles API',
+            error
+        })
+    }
+
+}
+
+
+
+
+
+
+
 const getScienceArticleByID = async (req,res) => {
     try {
         const articleID = req.params.id ;
@@ -386,4 +425,5 @@ module.exports = {
     updateArticle,
     deleteArticle,
     getFilteredArticles,
+    getBoughtScienceArticle
 };
