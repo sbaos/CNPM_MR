@@ -30,7 +30,7 @@ const RegisterPage = () => {
             return;
         }
         try {
-            const res = await fetch(`${BACKEND_URL}/reader/create`, {
+            const res = await fetch(`${BACKEND_URL}/admin/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Specify JSON content type
