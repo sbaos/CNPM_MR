@@ -23,7 +23,8 @@ export const findContentCondition = [
     {
         key: 'pricemax',
         value: 'Giá cuối'
-    }, {
+    }
+    , {
         key: 'hasBuy',
         value: 'Có mua'
     }

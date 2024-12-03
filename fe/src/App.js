@@ -45,7 +45,7 @@ function App() {
   const getPaper = async () => {
     try {
       const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080/api/v1";
-      const response = await fetch(`${backendUrl}/science_article${user.id}`, {
+      const response = await fetch(`${backendUrl}/science_article/${user.id}`, {
         method: "GET",
       });
 
