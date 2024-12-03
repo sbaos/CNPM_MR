@@ -65,7 +65,7 @@ FROM (
     SELECT ArticleCouponID -- Use the actual column name here
     FROM DISCOUNT_ON_PAYMENT_ITEM 
     WHERE PaymentItemID IN (
-        SELECT PaymentItemID -- Use the actual column name here
+        SELECT Id -- Use the actual column name here
         FROM PAYMENT_ITEM 
         WHERE PaymentID = NEW.PaymentID
     )
