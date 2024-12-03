@@ -41,7 +41,7 @@ BEGIN
 	END IF;
     
     SET @sql = CONCAT('    SELECT payment.id , payment.time , CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(payment.id) as cost,(CALCULATE_SUM_MONEY_OF_PAYMENT_BEFORE_APPLY_COUPON(payment.id) - CALCULATE_SUM_MONEY_OF_PAYMENT_AFTER_APPLY_ALL_COUPON(payment.id)) as discount, AVG(science_article.Price - CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ARTICLE_DC(payment_item.Id) - CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ASD_ON_P(payment_item.Id) - CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_PAEDC_ON_P(payment_item.Id)) as average_item_cost
-	FROM payment join (payment_item JOIN science_article ON payment_item.Id = science_article.id) ON payment.id = payment_item.PaymentID ',@where_clause,' 	GROUP BY payment.id ' ,@having_clause,' ',@order_clause);
+	FROM payment join (payment_item JOIN science_article ON payment_item.ArticleID = science_article.id) ON payment.id = payment_item.PaymentID ',@where_clause,' 	GROUP BY payment.id ' ,@having_clause,' ',@order_clause);
 		
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
