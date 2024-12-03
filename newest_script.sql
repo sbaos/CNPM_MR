@@ -97,6 +97,7 @@ CREATE TABLE `article_benchmark_dataset` (
 
 LOCK TABLES `article_benchmark_dataset` WRITE;
 /*!40000 ALTER TABLE `article_benchmark_dataset` DISABLE KEYS */;
+INSERT INTO `article_benchmark_dataset` VALUES (1,'ImageNet','81.02'),(2,'ImageNet','83.07'),(3,'kitti','0.0012'),(4,'kitti','0.0025'),(5,'kitti','16.55'),(6,'kitti','15'),(7,'MNIST','23'),(8,'MNIST','25'),(9,'COCO','42'),(10,'kitti','40'),(11,'kitti','17'),(12,'kitti','23.5'),(13,'MNIST','25'),(14,'MNIST','30'),(15,'kitti','0.0001'),(16,'ImageNet','84.25'),(17,'NeRF','27'),(18,'COCO','37'),(19,'NeRF','18'),(20,'ImageNet','78.75'),(21,'COCO','41.5'),(22,'ImageNet','70.25'),(23,'kitti','27'),(24,'MNIST','30'),(25,'ImageNet','17'),(26,'wiki','40'),(27,'COCO','47.8'),(28,'COCO','49.25');
 /*!40000 ALTER TABLE `article_benchmark_dataset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,7 +244,7 @@ CREATE TABLE `author` (
   `Fname` varchar(255) DEFAULT NULL,
   `DomainConflict` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`orcid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -252,6 +253,7 @@ CREATE TABLE `author` (
 
 LOCK TABLES `author` WRITE;
 /*!40000 ALTER TABLE `author` DISABLE KEYS */;
+INSERT INTO `author` VALUES (1,'2000-12-01','Zhuofan Xia','Xia','Zhuofan','Tsinghua University'),(2,'2000-12-02','Ze Liu','Liu','Ze','microsoft.com'),(3,'2000-12-03','Haozhe Si','Si','Haozhe','illinois.edu'),(4,'2000-12-04','Ning Zhang','Zhang','Ning','utwente.nl'),(5,'2000-12-05','Longfei Yan','Yan','Longfei','hust.edu.cn'),(6,'2000-12-06','Hidenobu Matsuki','Matsuki','Hidenobu','imperial.ac.uk'),(7,'2000-12-07','Xianjin CHAO','CHAO','Xianjin','cityu.edu.hk'),(8,'2000-12-08','Jiaze Sun','Sun','Jiaze','imperial.ac.uk'),(9,'2000-12-09','Yunyang Zhang','Zhang','Yunyang','csu.ac.cn'),(10,'2000-12-10','Linghua Tang','Tang','Linghua','just.edu.vn'),(11,'2000-12-11','Yu Liu','Liu','Yu','Xinjiang University'),(12,'2000-12-12','Markus Schon','Schon','Markus','uni-ulm.de'),(13,'2000-12-13','Jiapeng Zhu','Zhu','Jiapeng','Xiaomi AI Lab'),(14,'2000-12-14','Rui Shao','Shao','Rui','comp.hkbu.edu.hk'),(15,'2000-12-15','Yue Fan','Fan','Yue','mpi-inf.mpg.de'),(16,'2000-12-16','Qiming Zhang','Zhang','Qiming','uni.sydney.edu.au'),(17,'2000-12-17','Yushi Lan','Lan','Yushi','e.ntu.edu.sg'),(18,'2000-12-18','Bowen Zhang','Zhang','Bowen','adelaide.edu.au'),(19,'2000-12-19','Huazhen Chu','Chu','Huazhen','xs.ustb.edu.cn'),(20,'2000-12-20','Lei Wang','Wang','Lei','alum.mit.edu'),(21,'2000-12-21','Shuhan Chen','Chen','Shuhan','yzu.edu.cn'),(22,'2000-12-22','Ali Nozaripour','Nozaripour','Ali','semnan.ac.ir'),(23,'2000-12-23','Junzhong Ji','Ji','Junzhong','bju.edu.cn'),(24,'2000-12-24','JiaYan Wen','Wen','JiaYan','gu.edu.cn'),(25,'2000-12-25','Geoffrey Hinton','Hinton','Geoffrey','cs.toronto.edu'),(26,'2000-12-26','Albert Gu','Gu','Albert','andrew.cmu.edu'),(27,'2000-12-27','Shuo Wang','Wang','Shuo','baidu.com'),(28,'2000-12-28','Rahima Khanam','Khanam','Rahima','had.ac.uk');
 /*!40000 ALTER TABLE `author` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,6 +304,7 @@ CREATE TABLE `author_write_article` (
 
 LOCK TABLES `author_write_article` WRITE;
 /*!40000 ALTER TABLE `author_write_article` DISABLE KEYS */;
+INSERT INTO `author_write_article` VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),(11,11),(12,12),(13,13),(14,14),(15,15),(16,16),(17,17),(18,18),(19,19),(20,20),(21,21),(22,22),(23,23),(24,24),(25,25),(26,26),(27,27),(28,28);
 /*!40000 ALTER TABLE `author_write_article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -505,6 +508,7 @@ CREATE TABLE `dataset` (
 
 LOCK TABLES `dataset` WRITE;
 /*!40000 ALTER TABLE `dataset` DISABLE KEYS */;
+INSERT INTO `dataset` VALUES ('COCO','COCO (Common Objects in Context) is a large-scale object detection, segmentation, and captioning dataset.','200'),('ImageNet','ImageNet is a massive image database with over 14 million images, used for training and benchmarking computer vision models, particularly in image classification and object detection.','2000'),('kitti','KITTI is a popular dataset for autonomous driving research, containing real-world sensor data like images, LiDAR scans, and GPS/IMU data.','100'),('MNIST','The MNIST dataset is a large database of handwritten digits, commonly used for training and testing image processing systems and machine learning models.','10'),('NeRF','The NeRF dataset is a collection of images used to train Neural Radiance Fields (NeRF) models.','150'),('wiki','Wiki Datasets are collections of data extracted from Wikipedia articles. They are often used for various natural language processing (NLP) tasks, such as text classification, summarization, and machine translation.','1500');
 /*!40000 ALTER TABLE `dataset` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -603,8 +607,8 @@ DROP TABLE IF EXISTS `discount_on_payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `discount_on_payment` (
   `PaymentCounponID` int NOT NULL,
-  `PaymentID` int DEFAULT NULL,
-  PRIMARY KEY (`PaymentCounponID`),
+  `PaymentID` int NOT NULL,
+  PRIMARY KEY (`PaymentCounponID`,`PaymentID`),
   KEY `PaymentID` (`PaymentID`),
   CONSTRAINT `discount_on_payment_ibfk_1` FOREIGN KEY (`PaymentCounponID`) REFERENCES `payment_discount_coupon` (`Id`),
   CONSTRAINT `discount_on_payment_ibfk_2` FOREIGN KEY (`PaymentID`) REFERENCES `payment` (`id`)
@@ -617,7 +621,7 @@ CREATE TABLE `discount_on_payment` (
 
 LOCK TABLES `discount_on_payment` WRITE;
 /*!40000 ALTER TABLE `discount_on_payment` DISABLE KEYS */;
-INSERT INTO `discount_on_payment` VALUES (9,2),(13,3),(14,4),(8,5),(15,5),(16,6),(6,7),(12,7),(10,8);
+INSERT INTO `discount_on_payment` VALUES (9,2),(13,3),(14,4),(8,5),(15,5),(8,6),(16,6),(6,7),(12,7),(10,8);
 /*!40000 ALTER TABLE `discount_on_payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -630,8 +634,8 @@ DROP TABLE IF EXISTS `discount_on_payment_item`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `discount_on_payment_item` (
   `ArticleCouponID` int NOT NULL,
-  `PaymentItemID` int DEFAULT NULL,
-  PRIMARY KEY (`ArticleCouponID`),
+  `PaymentItemID` int NOT NULL,
+  PRIMARY KEY (`ArticleCouponID`,`PaymentItemID`),
   KEY `PaymentItemID` (`PaymentItemID`),
   CONSTRAINT `discount_on_payment_item_ibfk_1` FOREIGN KEY (`ArticleCouponID`) REFERENCES `article_discount_coupon` (`Id`),
   CONSTRAINT `discount_on_payment_item_ibfk_2` FOREIGN KEY (`PaymentItemID`) REFERENCES `payment_item` (`id`)
@@ -644,7 +648,7 @@ CREATE TABLE `discount_on_payment_item` (
 
 LOCK TABLES `discount_on_payment_item` WRITE;
 /*!40000 ALTER TABLE `discount_on_payment_item` DISABLE KEYS */;
-INSERT INTO `discount_on_payment_item` VALUES (4,1),(1,6),(2,11);
+INSERT INTO `discount_on_payment_item` VALUES (4,1),(1,6),(2,11),(2,23);
 /*!40000 ALTER TABLE `discount_on_payment_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1105,8 +1109,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-30  7:27:14
-
+-- Dump completed on 2024-12-02 23:48:11
 ALTER TABLE payment
 ADD COLUMN status VARCHAR(50) NOT NULL DEFAULT 'Pending';
 
