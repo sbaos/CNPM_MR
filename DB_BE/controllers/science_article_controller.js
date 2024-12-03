@@ -26,6 +26,8 @@ async function getSAHelper(item, ReaderID) {
     }
 }
 
+
+
 const getScienceArticle =  async (req,res) => {
     try {
         const ReaderID = req.params.ReaderID
@@ -375,6 +377,8 @@ const deleteArticle = async (req,res) => {
 
 const getFilteredArticles = async (req, res) => {
     try {
+
+        const ReaderID = req.params.ReaderID
         const {
             author,
             title,
@@ -403,10 +407,13 @@ const getFilteredArticles = async (req, res) => {
             });
         }
 
+        const promises = data[0][0].map(item => getSAHelper(item,ReaderID) )
+        const response_data = await Promise.all(promises)
+
         res.status(201).send({
             success: true,
             message: "Susccessfully filtered articles",
-            data: data[0],
+            data: response_data,
         });
     } catch (error) {
         console.log(error);

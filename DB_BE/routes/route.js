@@ -9,7 +9,7 @@ const router = express.Router()
 
 
 //GET FILTERED ARTICLE
-router.get('/science_article/filtered' , getFilteredArticles)
+router.get('/science_article/filtered/:ReaderID' , getFilteredArticles)
 
 
 router.get('/science_article/:ReaderID' , getScienceArticle ) 
