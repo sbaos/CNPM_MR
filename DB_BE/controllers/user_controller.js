@@ -127,8 +127,38 @@ const userLogin = async (req,res) => {
     }
 }
 
+const userChangePassword = async (req,res) => {
+    try {
+        const {Username , newPassword} = req.body
+        const check = await db.query(`SELECT * FROM user WHERE Username LIKE ?`,['%' + Username+'%'])
+        if (!check[0].length){
+            return res.status(404).send({
+                success : false ,
+                message : 'No user'
+            })
+        }
+        const hashPassword = await bcrypt.hash(newPassword,saltRounds)
+        const data = await db.query(`UPDATE user SET Hashpassword = ? WHERE Username LIKE ?` , [hashPassword,'%' + Username+'%'])
+
+        res.status(200).send({
+            success : true,
+            message : 'Change password success',
+            data : data[0]
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success : false,
+            message : 'Error in change user password API',
+            error
+        })
+    }
+}
 
 
 
 
-module.exports = {createAdmin , createReader , userLogin}
+
+module.exports = {createAdmin , createReader , userLogin , userChangePassword}

@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-async function getSAHelper(item) {
+async function getSAHelper(item, ReaderID) {
     try {
         const subcategory_data = await db.query(`SELECT * FROM article_categorize_subcategory WHERE ArticleID = ? ` , [item.id])
 
@@ -8,7 +8,11 @@ async function getSAHelper(item) {
             FROM PAPER JOIN academic_event ON paper.EventID = academic_event.id
             WHERE paper.id = ? ` , [item.id])
 
-        const res = {...item,subcategory : subcategory_data[0] , academic_event : academic_event_data[0]}
+        const payment_data = await db.query(`SELECT * 
+            FROM (science_article join payment_item on science_article.id = payment_item.ArticleID) join payment on payment.id = payment_item.PaymentID
+            WHERE payment.ReaderID = ? AND payment_item.ArticleID = ? AND payment.status = 'success'` , [ReaderID,item.id])
+
+        const res = {...item,subcategory : subcategory_data[0] , academic_event : academic_event_data[0] , hasBuy :payment_data[0].length? true : false}
 
         return res
         
@@ -24,6 +28,7 @@ async function getSAHelper(item) {
 
 const getScienceArticle =  async (req,res) => {
     try {
+        const ReaderID = req.params.ReaderID
         const data = await db.query('SELECT * FROM SCIENCE_ARTICLE');
         if (!data){
             return res.status(404).send({
@@ -33,7 +38,7 @@ const getScienceArticle =  async (req,res) => {
             })
         }
 
-        const promises = data[0].map(item => getSAHelper(item) )
+        const promises = data[0].map(item => getSAHelper(item,ReaderID) )
         const response_data = await Promise.all(promises)
 
         res.status(200).send({
