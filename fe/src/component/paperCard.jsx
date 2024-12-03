@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BACKEND_URL } from "../const/default";
 import { toast } from "react-toastify";
 import getAllCoupon from "../utils/getAllCoupon";
@@ -144,6 +144,13 @@ function PaperCard({ removeFC, type, classList, data, handleEdit, isManage = fal
             coupon?.ArticleID === articleId && couponIds?.includes(coupon?.CoupinID)
         );
     }
+    const handleOpen = (url) => {
+        if (!data.hasBuy) {
+            toast.error('Bạn cần mua để xem science article này');
+            return;
+        }
+        window.open(url);
+    }
 
     useEffect(() => {
         getCP();
@@ -161,21 +168,33 @@ function PaperCard({ removeFC, type, classList, data, handleEdit, isManage = fal
                         <div className="text-xl font-bold text-gray-800 cursor-pointer hover:text-gray-600" >{data.Title}</div>
                         <div className="mt-2 text-sm text-gray-600 columns-2 flex flex-col">
                             <div className="flex flex-row">
-                                <div className="">TEstlink/facebook.com</div>
-                                <div className="columns-5"></div>
-                                <div>{data.PublishDate}</div>
+                                {/* <Link to={data.link} className="truncate max-w-xs text-blue-600 underline">Link: {data.link}</Link> */}
+                                <div>
+                                    {new Date(data.PublishDate).toLocaleString('en-GB', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: false,
+                                    })}
+                                </div>
                             </div>
                             <div>
                                 Subcategory:  {JSON.stringify(data.subcategory?.map(item => item.SubcategoryName))}
                             </div>
+                            <div>
+                                Event: {JSON.stringify(data.academic_event?.map(item => item.name + '-' + item.year))}
+                            </div>
                         </div>
                         <div className={`mt-2 text-xl text-${isDiscount ? 'red' : 'green'}-500`}>Price: {data.Price}$</div>
-                        {type === 'buy' && coupons?.length > 0 ?
+                        {/* {type === 'buy' && coupons?.length > 0 ?
                             <div className="mt-2 text-xl text-red-500">Discount price:
                                 {Math.max(0, calDirect() + calPercent())}$
                             </div>
                             : <></>
-                        }
+                        } */}
                     </div>
                     <div>
                         <div className="flex flex-row justify-end hover:bg-gray-100 p-2 rounded-md">
@@ -192,12 +211,12 @@ function PaperCard({ removeFC, type, classList, data, handleEdit, isManage = fal
                         </div>
                         <div>
                             <div className="text-lg font-semibold text-gray-700">
-                                <button className="w-40 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded">Paper</button>
+                                <button onClick={() => handleOpen(data.link)} className="w-40 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded">Paper</button>
                             </div>
                             <div className="text-lg font-semibold text-gray-700 my-2">
-                                <button onClick={() => OpenGithub(data.GithubCode)} className="w-40 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded">GitCode</button>
+                                <button onClick={() => handleOpen(data.GithubCode)} className="w-40 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded">GitCode</button>
                             </div>
-                            {type === 'cart' || isManage || user.role === 'admin' || type === 'buy' ?
+                            {type === 'cart' || isManage || user.role === 'admin' || type === 'buy' || data.hasBuy ?
                                 <></> :
                                 <div className="text-lg font-semibold text-gray-700 my-2">
                                     <button

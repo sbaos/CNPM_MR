@@ -21,14 +21,6 @@ function ChooseCouponModal({ coupons, setShow, show, type, setIsSelected, articl
             }
         });
     };
-
-    const handleApply = () => {
-        // Handle applying selected coupons (implement as needed)
-
-
-        console.log("Selected Coupons:", selectedCoupons);
-        setShow(false);
-    };
     return (
         <>
             {show && (
@@ -46,10 +38,22 @@ function ChooseCouponModal({ coupons, setShow, show, type, setIsSelected, articl
                                             <div className="text-lg font-semibold text-gray-700">{item.Title}</div>
                                             <div className="text-sm text-gray-600">
                                                 <div>Giảm {item.Discount} {item.DiscountUnit}</div>
-                                                <div>Điều kiện: {item.VipTierRequired}</div>
-                                                <div>Hạn dùng đến {item.TimeEnd}</div>
+                                                <div>Điều kiện Vip: {item.VipTierRequired}</div>
+                                                <div>Hạn dùng đến: {new Date(item.TimeEnd).toLocaleString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: '2-digit',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    second: '2-digit',
+                                                    hour12: false,
+                                                })}
+                                                </div>
                                                 {type === 'payment' && <div>
                                                     Loại: {item.coupon_type}
+                                                    {item.coupon_type === "discount_on_subcategory" && <div>Subcategory: {JSON.stringify(item.subcategory.map(sub => sub.SubcategoryName))}</div>}
+                                                    {item.coupon_type === "discount_on_academic_event" && <div>Academic Event: {JSON.stringify(item.academic_event.map(event => (event.name + '-' + event.year)))}</div>}
+                                                    {item.coupon_type === "cost_base_discount" && <div>Cost condition price: {item.CostCondition}$</div>}
                                                 </div>}
                                             </div>
                                         </div>
