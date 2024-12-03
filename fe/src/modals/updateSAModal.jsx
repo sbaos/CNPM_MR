@@ -3,6 +3,7 @@ import moment from 'moment';
 import { BACKEND_URL } from '../const/default';
 import { useDispatch } from 'react-redux';
 import { changeSA_ID } from '../redux/saSlice';
+import { toast } from 'react-toastify';
 
 const UpdateScienceArticleModal = ({ visible, onClose, article, onUpdate, action = 'update' }) => {
     const [formData, setFormData] = useState({
@@ -60,9 +61,10 @@ const UpdateScienceArticleModal = ({ visible, onClose, article, onUpdate, action
             if (response.ok) {
                 dispatch(changeSA_ID({ ...payload, id: article.id }));
                 onUpdate();
+                toast.success('Cập nhật thành công');
                 onClose();
             } else {
-                window.alert(JSON.stringify(response));
+                toast.error('Cập nhật thất bại');
                 console.error('Failed to update article');
             }
         } catch (error) {
@@ -78,7 +80,7 @@ const UpdateScienceArticleModal = ({ visible, onClose, article, onUpdate, action
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Update Science Article</h2>
+                <h2 className="text-xl font-semibold mb-4">{action === 'update' ? 'Update' : 'Add'} Science Article</h2>
                 <form onSubmit={handleUpdate}>
                     <div className="mb-4">
                         <label htmlFor="Title" className="block text-sm font-medium text-gray-700">

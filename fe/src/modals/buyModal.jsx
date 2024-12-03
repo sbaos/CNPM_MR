@@ -231,6 +231,15 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
             Items,
             paymentApply
         }
+        let count = 0;
+        for (let i = 0; i < Items.length; i++) {
+            count += Items[i].CouponID.length;
+        }
+        count += paymentApply.length;
+        if (count > 2) {
+            toast.error('Số lượng coupon được áp dụng vượt quá giới hạn');
+            return;
+        }
         const res = await fetch(`${BACKEND_URL}/payment/create/${user.id}`, {
             method: 'POST',
             headers: {
