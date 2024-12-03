@@ -94,12 +94,14 @@ select Discount as Discount, DiscountUnit, base_price as BasePrice
 from discount_on_payment as dop
 join discount_coupon as dc on dop.PaymentCounponID = dc.id
 join cost_base_discount_coupon as cbdc on cbdc.id = PaymentCounponID
-where dop.PaymentID = P_ID
+where dop.PaymentID = P_ID and base_price >= cbdc.CostCondition
 ) as A ) as B;
     RETURN total_discounted_price;
 END //
 
 DELIMITER ;
+
+
 
 drop function if EXISTS CAL_SUM_MONEY_DISCOUNT_ON_PI_AFTER_APPLY_ASD_ON_P ;
 
