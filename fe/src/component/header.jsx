@@ -11,7 +11,7 @@ function Header() {
     return (
         <header className="bg-gray-800 text-white fixed w-full z-10">
             <div className="container mx-auto px-4 flex items-center justify-between py-4">
-                <div className="text-lg font-bold mr-4 ">Paper with code Lỏd</div>
+                <div className="text-lg font-bold mr-4 ">Paper with HCMUT</div>
                 <nav className="flex space-x-4">
                     {menu.map((item, index) => (
                         <Link

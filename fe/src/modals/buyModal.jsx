@@ -63,21 +63,21 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
         let sum = 0;
         for (let i = 0; i < canuse.length; i++) {
             if (canuse[i].DiscountUnit === '%')
-                sum += (item.price * (canuse[i].Discount / 100));
+                sum += (item.Price * (canuse[i].Discount / 100));
             else
                 sum += canuse[i].Discount;
         }
+        console.log(sum);
         return sum;
-    }
-    function calculateFinalPrice_AP_All() {
-        return calFinalPrice() - calculateCosBaseDiscount()
     }
     function calculateCosBaseDiscount() {
         let coupon = coupons?.filter(coupon => paymentUseCoupons.includes(coupon.id));
-        coupon = coupon.filter(item => item.coupon_type === "cost_base_discount")
+        const basePrice = calcuBasePrice();
+        coupon = coupon.filter(item => (item.coupon_type === "cost_base_discount" && item.CostCondition * 1.0 <= basePrice * 1.0))
         let totalP = 0;
         let totalS = 0;
-        const basePrice = calcuBasePrice();
+        console.log(coupon);
+        if (!coupon?.length) return 0;
         for (let i = 0; i < coupon.length; i++) {
             if (coupon?.[i]?.DiscountUnit === '%')
                 totalP += coupon[i].Discount * basePrice / 100;
@@ -111,17 +111,19 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
         return calculateFinalPrice(item, coupon);
 
     }
-    function calculateFinalPrice(item, coupons) {
+    function calculateFinalPrice(item) {
+        const coupons = articleCoupons;
         let finalPrice = item.Price;  // Start with the original price of the item
         articleUseCoupons.filter(a => a.ArticleID === item.id)
 
         // Filter coupons that apply to the specific item
-        const applicableCoupons = coupons?.filter(coupon =>
+        let applicableCoupons = coupons?.filter(coupon =>
             coupon.ArticleID === item.id  // Check if the coupon is for this article
         );
-        console.log(finalPrice);
-        console.log(applicableCoupons)
+
+        applicableCoupons = applicableCoupons?.filter(coupon => articleUseCoupons.find(item => item.ArticleID === coupon.ArticleID)?.CouponID?.includes(coupon.id));
         if (!applicableCoupons?.length) return finalPrice;
+
         // Apply each applicable coupon to the final price
         applicableCoupons?.forEach(coupon => {
             if (coupon.DiscountUnit === '%') {
@@ -139,13 +141,14 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
     const finalPrice = () => {
         const itemPrice = items.map((item) =>
             Math.max(
-                calculateFinalPrice(item, coupons)
+                calculateFinalPrice(item)
                 - calculateFinalPrice_AcaofItem(item)
                 - calculateFinalPrice_SubofItem(item)
                 , 0
             )
         );
         console.log(itemPrice);
+        console.log(calculateCosBaseDiscount());
         return itemPrice.reduce((acc, item) => acc + item, 0) - calculateCosBaseDiscount();
     }
     const getCoupon = async () => {
@@ -180,7 +183,7 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
         }
     }
     const handleApplyOnArticle = async (id) => {
-        console.log(articleCoupons);
+        console.log(articleUseCoupons);
         const coupon = articleCoupons?.filter(
             (item) =>
                 item.ArticleID === id &&
@@ -196,6 +199,8 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
     };
     const handleApplyOnPayment = async () => {
         const coupon = paymentCoupons;
+        console.log('A>>>>', articleUseCoupons);
+        console.log('B>>>>', paymentUseCoupons);
         setType('payment');
         setCoupons(coupon);
         setShowChooseCoupon(true);
@@ -247,10 +252,9 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
         console.log(res);
     }
     const setIsSelected = (articleID, couponID, action = 'add') => {
-
+        console.log('=======', articleUseCoupons);
         if (action === 'add') {
             const data = articleUseCoupons?.filter(item => item.ArticleID === articleID)?.[0];
-            console.log(articleUseCoupons);
             if (!data) {
                 const newData = [{ ArticleID: articleID, CouponID: [couponID] }];
                 console.log(newData);

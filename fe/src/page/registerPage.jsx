@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { BACKEND_URL } from '../const/default';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
@@ -7,7 +9,7 @@ const RegisterPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
     const handleRegister = async (e) => {
         e.preventDefault();
 
@@ -38,11 +40,18 @@ const RegisterPage = () => {
                     Password: password,
                 }),
             });
+            if (res.ok) {
+                toast.success('Register success');
+                navigate('/login');
 
+            } else {
+                toast.error('Register failed');
+            }
             console.log(res);
         }
         catch (err) {
             console.log(err);
+            toast.error('Register failed');
         }
         finally {
             setLoading(false);

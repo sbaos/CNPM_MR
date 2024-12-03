@@ -25,7 +25,7 @@ function HomePage() {
     const getPaper = async () => {
         try {
             const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080/api/v1";
-            const response = await fetch(`${backendUrl}/science_article`, {
+            const response = await fetch(`${backendUrl}/science_article/${user.id}`, {
                 method: "GET",
             });
 
@@ -115,7 +115,18 @@ function HomePage() {
                                             );
                                         })}
                                     </select>
-                                ) : (
+                                ) : item.key === 'hasBuy' ?
+                                    <select
+                                        className="w-full border border-gray-400 px-2 py-1 rounded"
+                                        value={findCondition[index].value || ''}
+                                        onChange={(e) => handleChangeCondition(index, e.target.value)}
+                                    >
+                                        <option value="" disabled>HasBuy</option>
+                                        <option value=""></option>
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    :
                                     <input
                                         type="text"
                                         className="w-full border border-gray-400 px-2 py-1 rounded"
@@ -123,7 +134,7 @@ function HomePage() {
                                         value={findCondition[index].value || ''}
                                         onChange={(e) => handleChangeCondition(index, e.target.value)}
                                     />
-                                )}
+                                }
                             </div>
                         ))}
 

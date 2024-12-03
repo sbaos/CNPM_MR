@@ -10,7 +10,7 @@ function CartPage() {
     const [isBuyModalVisible, setBuyModalVisible] = useState(false);
     const [selectedArticles, setSelectedArticles] = useState([]);
     const [isAllChecked, setAllChecked] = useState(false); // State for "Check All"
-    const [articleUseCoupons, setArticleUseCoupons] = useState([{ ArticleID: 3, CouponID: [] }]);
+    const [articleUseCoupons, setArticleUseCoupons] = useState([]);
     const sa = useSelector(state => state.sa.list);
     const addSelectedArticles = async () => {
         const cartID = user.cartId;
@@ -73,7 +73,7 @@ function CartPage() {
     return (
         <>
             <div className="w-full">
-                {items?.length && <div className="flex justify-between items-center mb-4">
+                {items?.length ? <div className="flex justify-between items-center mb-4">
                     {/* "Check All" Button */}
                     <button
                         onClick={handleCheckAll}
@@ -82,7 +82,7 @@ function CartPage() {
                     >
                         {isAllChecked ? "Uncheck All" : "Check All"}
                     </button>
-                </div>}
+                </div> : <></>}
 
                 <div className="flex flex-col space-y-4">
                     {items?.length > 0 ? (
