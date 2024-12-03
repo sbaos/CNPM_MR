@@ -7,10 +7,14 @@ const { getAllAppliableCouponByReader } = require('../controllers/coupon_control
 
 const router = express.Router()
 
-router.get('/science_article/:ReaderID' , getScienceArticle ) 
 
 //GET FILTERED ARTICLE
 router.get('/science_article/filtered' , getFilteredArticles)
+
+
+router.get('/science_article/:ReaderID' , getScienceArticle ) 
+
+
 
 router.get('/science_article/:id' , getScienceArticleByID )
 
