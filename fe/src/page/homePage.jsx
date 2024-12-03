@@ -66,7 +66,7 @@ function HomePage() {
                 findCondition.map(item => [item.key, item.value])
             ).toString();
 
-            const response = await fetch(`${BACKEND_URL}/science_article/filtered?${queryParams}`, {
+            const response = await fetch(`${BACKEND_URL}/science_article/filtered/${user.id}?${queryParams}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -77,8 +77,15 @@ function HomePage() {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            const info = data.data[0].filter(item => !item.deleteAt);
-            dispatch(initSA(info));
+            const info = data.data.filter(item => !item.deleteAt);
+            const hasBuy_ = findCondition.find(item => item.key === 'hasBuy')?.value;
+            let info_ = info;
+            if (hasBuy_ === 'true')
+                info_ = info_.filter(item => item.hasBuy === true);
+            else if (hasBuy_ === 'false')
+                info_ = info_.filter(item => item.hasBuy === false);
+            console.log(info_);
+            dispatch(initSA(info_));
         } catch (error) {
             console.log(error);
         }
@@ -122,7 +129,7 @@ function HomePage() {
                                         onChange={(e) => handleChangeCondition(index, e.target.value)}
                                     >
                                         <option value="" disabled>HasBuy</option>
-                                        <option value=""></option>
+                                        <option value="">None</option>
                                         <option value="true">True</option>
                                         <option value="false">False</option>
                                     </select>
