@@ -236,7 +236,7 @@ function BuyModal({ items, setShow, show, selectedArticles, setSelectedArticles,
             count += Items[i].CouponID.length;
         }
         count += paymentApply.length;
-        if (count > 2) {
+        if (count > 5) {
             toast.error('Số lượng coupon được áp dụng vượt quá giới hạn');
             return;
         }

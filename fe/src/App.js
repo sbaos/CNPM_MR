@@ -62,7 +62,7 @@ function App() {
   };
   useEffect(() => {
     SignIN();
-    getPaper();
+    // getPaper();
   }, [user]);
   return (
     <div className="App">

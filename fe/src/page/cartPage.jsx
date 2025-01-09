@@ -31,7 +31,7 @@ function CartPage() {
             setSelectedArticles((prev) => prev.filter((item) => item.id !== article.id));
         }
     };
-    console.log(articleUseCoupons);
+    // console.log(articleUseCoupons);
     const handleCheckAll = () => {
         if (isAllChecked) {
             // Uncheck all
@@ -45,6 +45,7 @@ function CartPage() {
 
     const getCart = async () => {
         try {
+            if (user.id === undefined) return;
             const response = await fetch(
                 `${BACKEND_URL}/cart/getall/reader/${user.id}`,
                 {
@@ -56,18 +57,20 @@ function CartPage() {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            const info = sa.filter(saItem =>
-                data?.data?.some(dataItem => dataItem.id === saItem.id)
-            );
+            const info = data.data;
+            // sa.filter(saItem =>
+            //     data?.data?.some(dataItem => dataItem.id === saItem.id)
+            // );
+            console.log(data.data);
             setItems(info?.map((item) => { return { ...item, isDeleted: false } }));
             console.log(data);
         } catch (error) {
             console.error("Error fetching cart:", error.message);
         }
     };
-    console.log(items);
     useEffect(() => {
-        getCart();
+        if (user.id)
+            getCart();
     }, [user]);
 
     return (

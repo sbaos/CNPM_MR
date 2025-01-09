@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 function ManageScienceArticlePage() {
     const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
     const scienceArticles = useSelector(state => state.sa.list);
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
@@ -25,7 +26,7 @@ function ManageScienceArticlePage() {
     };
     const getPaper = async () => {
         try {
-            const response = await fetch(`${BACKEND_URL}/science_article`, {
+            const response = await fetch(`${BACKEND_URL}/science_article/${user.id}`, {
                 method: "GET",
             });
 
