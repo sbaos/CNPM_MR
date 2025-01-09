@@ -14,21 +14,23 @@ function Header() {
                 <div className="text-lg font-bold mr-4 ">Paper with HCMUT</div>
                 <nav className="flex space-x-4">
                     {menu.map((item, index) => (
-                        <Link
+                        <a
                             key={index}
-                            to={item.path}
+                            href={item.path}
                             className="text-white hover:bg-gray-700 px-3 py-2 rounded-md"
                         >
                             {item.name}
-                        </Link>
+                        </a>
                     ))}
                 </nav>
                 {user.isLogin ?
                     <div className="flex space-x-4 items-center">
-                        <div>
-                            Vip: {user.vipTier}
-                        </div>
-                        <button onClick={() => dispatch(logout())} className="text-white hover:bg-gray-700 bg-red-500 px-3 py-2 rounded-md">Đăng xuất</button>
+                        {user.role !== 'admin' &&
+                            <div div >
+                                Vip: {user.vipTier}
+                            </div>
+                        }
+                        <button onClick={() => { dispatch(logout()); navigate('/login') }} className="text-white hover:bg-gray-700 bg-red-500 px-3 py-2 rounded-md">Đăng xuất</button>
                     </div>
                     :
                     <button onClick={() => navigate('/login')} className="text-white hover:bg-gray-700 bg-green-500 px-3 py-2 rounded-md">Đăng nhập</button>}
