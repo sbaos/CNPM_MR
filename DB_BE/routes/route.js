@@ -1,18 +1,24 @@
 const express = require('express');
-const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle, getFilteredArticles } = require('../controllers/science_article_controller');
-const { createAdmin ,createReader, userLogin } = require('../controllers/user_controller');
+const { getScienceArticle, getScienceArticleByID, addScienceArticle, updateArticle, deleteArticle, getFilteredArticles, getBoughtScienceArticle } = require('../controllers/science_article_controller');
+const { createAdmin ,createReader, userLogin, userChangePassword } = require('../controllers/user_controller');
 const { getAllArticleByReaderID, addArticleToCart, removeArticlefromCart } = require('../controllers/cart_controller');
 const { createPaymentWithReaderID, createPaymentWithReaderIDv2, getAllPaymentHistory } = require('../controllers/payment_controller');
 const { getAllAppliableCouponByReader } = require('../controllers/coupon_controller');
 
 const router = express.Router()
 
-router.get('/science_article' , getScienceArticle ) 
 
 //GET FILTERED ARTICLE
-router.get('/science_article/filtered' , getFilteredArticles)
+router.get('/science_article/filtered/:ReaderID' , getFilteredArticles)
+
+
+router.get('/science_article/:ReaderID' , getScienceArticle ) 
+
+
 
 router.get('/science_article/:id' , getScienceArticleByID )
+
+router.get('/bought_science_article/:ReaderID' , getBoughtScienceArticle )
 
 // add paper 
 router.post('/science_article/add' , addScienceArticle  )
@@ -31,6 +37,9 @@ router.post('/reader/create' , createReader)
 
 //LOGIN 
 router.post('/user/login' ,  userLogin)
+
+//CHAGE PASSWORD
+router.post('/user/change_password' , userChangePassword )
 
 //GET ALL ITEM OF READER 
 router.get('/cart/getall/reader/:id' , getAllArticleByReaderID)
